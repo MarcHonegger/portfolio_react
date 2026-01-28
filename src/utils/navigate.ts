@@ -13,8 +13,13 @@ export function navigate(path: string) {
                 const el = document.getElementById(frag)
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
             }, 50)
+        } else {
+            // No hash: always reset scroll to top for detail pages
+            setTimeout(() => {
+                window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+            }, 0)
         }
-    } catch (e) {
+    } catch {
         // no-op
     }
 }

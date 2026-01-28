@@ -11,22 +11,22 @@ const focusAreas = [
 	{
 		title: 'Automation with empathy',
 		copy: 'I study real banking workflows first, then automate only where it creates calm.',
-		href: '/projects/risk-signal-automator',
+		href: '/focus/automation-with-empathy',
 	},
 	{
 		title: 'Finance fluency',
 		copy: 'Time inside risk and onboarding teams showed me where regulated systems feel clunky.',
-		href: '/projects/process-clarity-kit',
+		href: '/focus/finance-fluency',
 	},
 	{
 		title: 'Mentorship & responsibility',
 		copy: 'With Rock Your Life I translate tech ideas into plans that feel achievable.',
-		href: '/personal',
+		href: '/focus/mentorship-responsibility',
 	},
 	{
 		title: 'Brewing ideas',
 		copy: 'Coffee and tea rituals help me slow down, notice details, and ship thoughtfully.',
-		href: '/projects/brewed-insights-log',
+		href: '/focus/brewing-ideas',
 	},
 ]
 
@@ -67,7 +67,7 @@ const personalGrowth = [
 	{ title: 'Movement', copy: 'Strength training, running, and walks to reset my focus.', href: '/personal/sport' },
 	{ title: 'Journaling', copy: 'Morning reflections to capture gratitude and track experiments.', href: '/personal/journaling' },
 	{ title: 'Coffee & tea', copy: 'Dialing espresso shots, cupping sessions, and sharing tasting notes.', href: '/personal/coffee' },
-	{ title: 'Reading', copy: 'Finance, systems thinking, and a steady flow of biographies.', href: '/personal' },
+	{ title: 'Reading', copy: 'Finance, systems thinking, and a steady flow of biographies.', href: '/personal/reading' },
 ]
 
 function App() {
@@ -87,14 +87,6 @@ function App() {
 									Business Informatics student exploring automation, finance, and longevity.
 								</p>
 								<p className="support">Sharing how I think — not selling anything.</p>
-								<div className="hero-actions" aria-label="Primary actions">
-									<Button variant="primary" size="lg" onClick={() => navigate('/personal')}>
-										See personal
-									</Button>
-									<Button variant="outline-light" size="lg" onClick={() => navigate('/projects')}>
-										Project snapshots
-									</Button>
-								</div>
 							</Col>
 							<Col lg={5} className="hero-card-col d-flex align-items-center justify-content-center justify-content-lg-end">
 								<div className="hero-card">
@@ -140,7 +132,7 @@ function App() {
 									.replace(/\s+/g, '-')
 								return (
 									<Col md={3} key={item.title}>
-										<Card id={slug} className="glass-card personal-card h-100" role="button" onClick={() => navigate(item.href || '/projects')}>
+										<Card id={slug} className="glass-card personal-card h-100" role="button" onClick={() => navigate(item.href)}>
 											<Card.Body>
 												<Card.Title>{item.title}</Card.Title>
 												<Card.Text>{item.copy}</Card.Text>

@@ -10,6 +10,7 @@ const items = [
   { title: 'Journaling', copy: 'Morning reflections and simple weekly reviews.', href: '/personal/journaling' },
   { title: 'Sport', copy: 'Strength, running, and consistency over extremes.', href: '/personal/sport' },
   { title: 'Coffee & tea', copy: 'Rituals that slow me down and sharpen curiosity.', href: '/personal/coffee' },
+  { title: 'Reading', copy: 'Finance, systems thinking, and a steady flow of biographies.', href: '/personal/reading' },
 ]
 
 const PersonalIndex: React.FC = () => {

@@ -2,14 +2,14 @@ import React from 'react'
 import DetailPageLayout from '../../components/DetailPageLayout'
 import Card from 'react-bootstrap/Card'
 
-const Journaling: React.FC = () => {
+const Reading: React.FC = () => {
   return (
-    <DetailPageLayout title="Journaling" subtitle="Morning reflections & weekly review" backTo="/personal/journaling" image="/assets/big_profile.jpeg">
+    <DetailPageLayout title="Reading" subtitle="Quiet focus and long-form thinking" backTo="/personal/reading" image="/assets/big_profile.jpeg">
       <Card className="mb-4 card-section">
         <Card.Body>
           <h3>Why this matters to me</h3>
           <p>
-            Short, regular notes help me turn vague thoughts into small experiments. Mornings are useful because they are calm and set the tone.
+            Reading slows me down and gives me time to connect ideas. I lean toward finance, systems thinking, and biographies to learn how people build resilient paths.
           </p>
         </Card.Body>
       </Card>
@@ -18,9 +18,9 @@ const Journaling: React.FC = () => {
         <Card.Body>
           <h4>How I do it</h4>
           <ul>
-            <li>5–10 minute morning reflections (what I learned, what I try today)</li>
-            <li>Weekly review: capture experiments and adjust simple routines</li>
-            <li>Keep entries short and action-focused</li>
+            <li>Short daily blocks for focused reading</li>
+            <li>Notes on frameworks or questions to revisit</li>
+            <li>Monthly review of highlights and learnings</li>
           </ul>
         </Card.Body>
       </Card>
@@ -29,9 +29,9 @@ const Journaling: React.FC = () => {
         <Card.Body>
           <h4>What it gives me</h4>
           <ul>
-            <li>Clearer priorities</li>
-            <li>Fewer repeated mistakes</li>
-            <li>Notes to seed future projects</li>
+            <li>Clearer language for complex topics</li>
+            <li>More patience with long-term systems</li>
+            <li>Better questions for projects</li>
           </ul>
         </Card.Body>
       </Card>
@@ -40,8 +40,8 @@ const Journaling: React.FC = () => {
         <Card.Body>
           <h4>Artifacts</h4>
           <ul>
+            <li><a href="#">Reading list (placeholder)</a></li>
             <li><a href="#">Notes (placeholder)</a></li>
-            <li><a href="#">Templates (placeholder)</a></li>
           </ul>
         </Card.Body>
       </Card>
@@ -49,4 +49,4 @@ const Journaling: React.FC = () => {
   )
 }
 
-export default Journaling
+export default Reading

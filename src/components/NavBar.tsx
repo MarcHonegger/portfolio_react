@@ -3,6 +3,7 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import Button from 'react-bootstrap/Button'
 import { useEffect, useState } from 'react'
+import type { MouseEvent } from 'react'
 import { navigate } from '../utils/navigate'
 
 export const NavBar = () => {
@@ -40,15 +41,15 @@ export const NavBar = () => {
 					<Nav className="ms-auto align-items-lg-center">
 						{[
 							{ id: 'home', label: 'Home', path: '/' },
-							{ id: 'skills', label: 'Focus', path: '/#skills' },
-							{ id: 'projects', label: 'Projects', path: '/projects' },
+							{ id: 'personal', label: 'Personal', path: '/#skills' },
+							{ id: 'journey', label: 'Journey', path: '/#journey' },
 							{ id: 'contact', label: 'Contact', path: '/#contact' },
 						].map((link) => (
 							<Nav.Link
 								key={link.id}
 								href={link.path}
 								className={activeLink === link.id ? 'active navbar-link' : 'navbar-link'}
-								onClick={(e: any) => {
+								onClick={(e: MouseEvent<HTMLAnchorElement>) => {
 									e.preventDefault()
 									onUpdateActiveLink(link.id)
 									navigate(link.path)
@@ -57,7 +58,7 @@ export const NavBar = () => {
 								{link.label}
 							</Nav.Link>
 						))}
-						<Button variant="light" size="sm" className="ms-lg-3" href="/#contact" onClick={(e:any) => { e.preventDefault(); navigate('/#contact') }}>
+						<Button variant="light" size="sm" className="ms-lg-3" href="/#contact" onClick={(e: MouseEvent<HTMLButtonElement>) => { e.preventDefault(); navigate('/#contact') }}>
 							Let&apos;s talk
 						</Button>
 					</Nav>
