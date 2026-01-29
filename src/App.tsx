@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Carousel from 'react-bootstrap/Carousel'
 import { navigate } from './utils/navigate'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 const focusAreas = [
 	{
@@ -83,6 +83,7 @@ const languages = [
 
 function App() {
 	const [introVisible, setIntroVisible] = useState(false)
+	const fadeRefs = useRef<HTMLElement[]>([])
 
 	useEffect(() => {
 		const onScroll = () => {
@@ -92,6 +93,29 @@ function App() {
 		window.addEventListener('scroll', onScroll, { passive: true })
 		return () => window.removeEventListener('scroll', onScroll)
 	}, [])
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						entry.target.classList.add('fade-in-visible')
+						observer.unobserve(entry.target)
+					}
+				})
+			},
+			{ threshold: 0.15 }
+		)
+
+		fadeRefs.current.forEach((el) => el && observer.observe(el))
+		return () => observer.disconnect()
+	}, [])
+
+	const registerFadeRef = (el: HTMLElement | null) => {
+		if (el && !fadeRefs.current.includes(el)) {
+			fadeRefs.current.push(el)
+		}
+	}
 
 	return (
 		<>
@@ -165,7 +189,7 @@ function App() {
 					</Container>
 				</section>
 
-				<section id="skills" className="section">
+				<section id="skills" className="section fade-in" ref={registerFadeRef}>
 					<Container>
 						<Row className="justify-content-center text-center mb-4">
 							<Col lg={8}>
@@ -195,7 +219,7 @@ function App() {
 					</Container>
 				</section>
 
-				<section id="personal" className="section personal-growth">
+				<section id="personal" className="section personal-growth fade-in" ref={registerFadeRef}>
 					<Container>
 						<Row className="justify-content-center text-center mb-4">
 							<Col lg={8}>
@@ -226,7 +250,7 @@ function App() {
 					</Container>
 				</section>
 
-				<section id="languages" className="section">
+				<section id="languages" className="section fade-in" ref={registerFadeRef}>
 					<Container>
 						<Row className="justify-content-center text-center mb-4">
 							<Col lg={8}>
@@ -251,7 +275,7 @@ function App() {
  					</Container>
  				</section>
 
-				<section id="projects" className="section">
+				<section id="projects" className="section fade-in" ref={registerFadeRef}>
 					<Container>
 						<Row className="justify-content-center text-center mb-4">
 							<Col lg={8}>
