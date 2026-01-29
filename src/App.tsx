@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Carousel from 'react-bootstrap/Carousel'
 import { navigate } from './utils/navigate'
+import { useEffect, useState } from 'react'
 
 const focusAreas = [
 	{
@@ -81,6 +82,17 @@ const languages = [
 ]
 
 function App() {
+	const [introVisible, setIntroVisible] = useState(false)
+
+	useEffect(() => {
+		const onScroll = () => {
+			setIntroVisible(window.scrollY > 40)
+		}
+		onScroll()
+		window.addEventListener('scroll', onScroll, { passive: true })
+		return () => window.removeEventListener('scroll', onScroll)
+	}, [])
+
 	return (
 		<>
 			<NavBar />
@@ -128,9 +140,13 @@ function App() {
 							</Col>
 						</Row>
 					</Container>
+					<div className="scroll-indicator" aria-hidden="true">
+						<span className="scroll-indicator__dot" />
+						<span className="scroll-indicator__arrow" />
+					</div>
 				</section>
 
-				<section id="intro" className="section intro-section">
+				<section id="intro" className={`section intro-section ${introVisible ? 'intro-visible' : ''}`}>
 					<Container>
 						<Row className="justify-content-center">
 							<Col lg={9} className="text-center">
