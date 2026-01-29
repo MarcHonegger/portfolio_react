@@ -5,74 +5,80 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
+import Carousel from 'react-bootstrap/Carousel'
 import { navigate } from './utils/navigate'
 
 const focusAreas = [
 	{
-		title: 'Automation with empathy',
-		copy: 'I study real banking workflows first, then automate only where it creates calm.',
+		title: 'Automation with Excel & Python',
+		copy: 'I study real banking workflows and optimize them with the available tools.',
 		href: '/focus/automation-with-empathy',
 	},
 	{
 		title: 'Finance fluency',
-		copy: 'Time inside risk and onboarding teams showed me where regulated systems feel clunky.',
+		copy: "I'm interested in how banks manage risk, compliance, and customer trust behind the scenes.",
 		href: '/focus/finance-fluency',
 	},
 	{
 		title: 'Mentorship & responsibility',
-		copy: 'With Rock Your Life I translate tech ideas into plans that feel achievable.',
+		copy: 'I like to share what I learn and help others navigate growth in tech and life.',
 		href: '/focus/mentorship-responsibility',
 	},
 	{
-		title: 'Brewing ideas',
-		copy: 'Coffee and tea rituals help me slow down, notice details, and ship thoughtfully.',
+		title: 'Coffee and tea',
+		copy: 'I love trying out new tastes and improving my espresso shots every day.',
 		href: '/focus/brewing-ideas',
-	},
-]
-
-const journey = [
-	{
-		year: '2025',
-		title: 'Business Informatics · University of Zurich',
-		detail: 'Digging into data-driven decision making, systems engineering, and responsible automation.',
-	},
-	{
-		year: '2024',
-		title: 'Banking Automation Intern',
-		detail: 'Built prototypes that gather risk signals so analysts focus on judgment, not spreadsheets.',
-	},
-	{
-		year: '2023',
-		title: 'Rock Your Life Mentor',
-		detail: 'Helped students plan careers, prepare interviews, and stay confident in tech conversations.',
 	},
 ]
 
 const workPieces = [
 	{
-		title: 'Risk Signal Automator',
-		copy: 'A concept that unifies disparate indicators into one clear review board.',
+		title: 'Game development for High School thesis',
+		copy: 'A small game built as part of my high school thesis work.',
 	},
 	{
-		title: 'Process Clarity Kit',
-		copy: 'Documented onboarding flows for finance teams and surfaced high-leverage tweaks.',
+		title: 'This portfolio created with AI',
+		copy: 'A personal portfolio built with AI-assisted design and development.',
 	},
 	{
-		title: 'Brewed Insights Log',
-		copy: 'My personal knowledge garden mixing study notes, brewing experiments, and prompts.',
+		title: 'Example project (placeholder)',
+		copy: 'Placeholder project for layout testing and spacing.',
+	},
+	{
+		title: 'Example project (placeholder 2)',
+		copy: 'Placeholder project for layout testing and spacing.',
+	},
+	{
+		title: 'Example project (placeholder 3)',
+		copy: 'Placeholder project for layout testing and spacing.',
+	},
+	{
+		title: 'Example project (placeholder 4)',
+		copy: 'Placeholder project for layout testing and spacing.',
 	},
 ]
+
+const projectSlides = [] as Array<typeof workPieces>
+for (let i = 0; i < workPieces.length; i += 3) {
+	projectSlides.push(workPieces.slice(i, i + 3))
+}
 
 const personalGrowth = [
 	{ title: 'Movement', copy: 'Strength training, running, and walks to reset my focus.', href: '/personal/sport' },
-	{ title: 'Journaling', copy: 'Morning reflections to capture gratitude and track experiments.', href: '/personal/journaling' },
-	{ title: 'Coffee & tea', copy: 'Dialing espresso shots, cupping sessions, and sharing tasting notes.', href: '/personal/coffee' },
-	{ title: 'Reading', copy: 'Finance, systems thinking, and a steady flow of biographies.', href: '/personal/reading' },
+	{ title: 'Journaling', copy: 'Morning preparation and evening reflections to capture gratitude and maximum growth.', href: '/personal/journaling' },
+	{ title: 'Coffee & tea', copy: 'Breaks are vital for my success and creativity; a good cup of coffee or tea helps me with that.', href: '/personal/coffee' },
+	{ title: 'Reading', copy: 'I love reading books to improve my life and a slice of life novel for a quick break.', href: '/personal/reading' },
+]
+
+const languages = [
+	{ name: 'German', level: 'Fluent' },
+	{ name: 'English', level: 'C1' },
+	{ name: 'French', level: 'B1' },
+	{ name: 'Japanese', level: 'Basics' },
+	{ name: 'Korean', level: 'Basics' },
 ]
 
 function App() {
-	// local state removed — not used in the current pages
-
 	return (
 		<>
 			<NavBar />
@@ -87,12 +93,32 @@ function App() {
 									Business Informatics student exploring automation, finance, and longevity.
 								</p>
 								<p className="support">Sharing how I think — not selling anything.</p>
+								<div className="hero-actions" aria-label="Profile links">
+									<Button
+										variant="outline-light"
+										size="lg"
+										href="https://www.linkedin.com/in/marc-honegger/"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										LinkedIn
+									</Button>
+									<Button
+										variant="outline-light"
+										size="lg"
+										href="https://github.com/MarcHonegger"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										GitHub
+									</Button>
+								</div>
 							</Col>
 							<Col lg={5} className="hero-card-col d-flex align-items-center justify-content-center justify-content-lg-end">
 								<div className="hero-card">
 									<img src="/assets/big_profile.jpeg" alt="Marc portrait" className="profile-img" />
 									<h3>Still brewing my path</h3>
-									<p>Automation projects, banking internships, Rock Your Life mentor, and endless espresso tasting notes.</p>
+									<p>I am improving my life every day by being a student at UZH and working part-time at different companies, energized by good coffee.</p>
 									<div className="hero-meta">
 										<span>Open to internships & collaborations</span>
 										<span>Zurich · remote-friendly</span>
@@ -108,7 +134,14 @@ function App() {
 						<Row className="justify-content-center">
 							<Col lg={9} className="text-center">
 								<p className="intro-callout">
-									I care about calm operations, transparent banking tools, and the people behind them. This page is a snapshot of what I&apos;ve built so far and how I plan to keep growing.
+									I care about efficient workflows and the impact they have on our lives.
+									<br />
+									I believe every role matters — from the barista behind the counter to the engineer building skyscrapers.
+									<br />
+
+                                    <br />
+                                    "Look out for people and people will look out for you." - Sam Walton
+                                    <br />
 								</p>
 							</Col>
 						</Row>
@@ -177,27 +210,31 @@ function App() {
 					</Container>
 				</section>
 
-				<section id="journey" className="section alt">
+				<section id="languages" className="section">
 					<Container>
 						<Row className="justify-content-center text-center mb-4">
 							<Col lg={8}>
-								<p className="eyebrow">Journey</p>
-								<h2>Learning in public</h2>
+								<p className="eyebrow">Languages</p>
+								<h2>How I communicate</h2>
+								<p>Guided by principles inspired by Dale Carnegie.</p>
 							</Col>
 						</Row>
-						<div className="journey-list">
-							{journey.map((stop) => (
-								<div key={stop.year} className="journey-item">
-									<div className="journey-year">{stop.year}</div>
-									<div>
-										<h3>{stop.title}</h3>
-										<p>{stop.detail}</p>
-									</div>
-								</div>
-							))}
-						</div>
-					</Container>
-				</section>
+						<Row className="justify-content-center">
+							<Col lg={10}>
+								<div className="languages-grid">
+									{languages.map((lang) => (
+										<Card key={lang.name} className="language-card">
+											<Card.Body>
+												<div className="language-name">{lang.name}</div>
+												<div className="language-level">{lang.level}</div>
+											</Card.Body>
+										</Card>
+ 									))}
+ 								</div>
+ 							</Col>
+ 						</Row>
+ 					</Container>
+ 				</section>
 
 				<section id="projects" className="section">
 					<Container>
@@ -208,48 +245,34 @@ function App() {
 								<p>These aren&apos;t products—they&apos;re learning moments that shaped my approach.</p>
 							</Col>
 						</Row>
-						<Row className="g-4">
-							{workPieces.map((piece) => {
-								const slug = piece.title.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-')
-								return (
-									<Col md={4} key={piece.title}>
-										<Card id={slug} className="glass-card personal-card project-card h-100" role="button" onClick={() => navigate('/projects/' + slug)}>
-											<Card.Body>
-												<Card.Title>{piece.title}</Card.Title>
-												<Card.Text>{piece.copy}</Card.Text>
-											</Card.Body>
-										</Card>
-									</Col>
-								)
-							})}
-						</Row>
-					</Container>
-				</section>
-
-				<section id="contact" className="section contact-section">
-					<Container>
-						<Row className="align-items-center g-4">
-							<Col md={7}>
-								<p className="eyebrow">Coffee chat</p>
-								<h2>Let&apos;s brew ideas and compare notes</h2>
-								<p>
-									If automation in banking, mentorship, or slow coffee rituals resonate with you, feel free to reach out.
-								</p>
-								<div className="contact-meta">
-									<span>marc.codes@email.com</span>
-									<span>@marc_codes</span>
-								</div>
-							</Col>
-							<Col md={5}>
-								<div className="contact-card">
-									<h3>Reach out</h3>
-									<form>
-										<input type="text" placeholder="Your name" />
-										<input type="email" placeholder="Email" />
-										<textarea placeholder="What should we chat about?" rows={3} />
-										<Button type="button">Send</Button>
-									</form>
-								</div>
+						<Row className="justify-content-center">
+							<Col lg={10}>
+								<Carousel className="projects-carousel" interval={5000} pause="hover" indicators>
+									{projectSlides.map((slide, slideIndex) => (
+										<Carousel.Item key={`slide-${slideIndex}`}>
+											<Row className="g-4">
+												{slide.map((piece) => {
+													const slug = piece.title.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-')
+													return (
+														<Col md={4} key={piece.title}>
+															<Card
+																id={slug}
+																className="glass-card personal-card project-card h-100"
+																role="button"
+																onClick={() => navigate('/projects/' + slug)}
+															>
+																<Card.Body>
+																	<Card.Title>{piece.title}</Card.Title>
+																	<Card.Text>{piece.copy}</Card.Text>
+																</Card.Body>
+															</Card>
+														</Col>
+													)
+												})}
+											</Row>
+										</Carousel.Item>
+									))}
+								</Carousel>
 							</Col>
 						</Row>
 					</Container>

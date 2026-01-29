@@ -1,7 +1,6 @@
 import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-import Button from 'react-bootstrap/Button'
 import { useEffect, useState } from 'react'
 import type { MouseEvent } from 'react'
 import { navigate } from '../utils/navigate'
@@ -42,8 +41,7 @@ export const NavBar = () => {
 						{[
 							{ id: 'home', label: 'Home', path: '/' },
 							{ id: 'personal', label: 'Personal', path: '/#skills' },
-							{ id: 'journey', label: 'Journey', path: '/#journey' },
-							{ id: 'contact', label: 'Contact', path: '/#contact' },
+							{ id: 'projects', label: 'Projects', path: '/#projects' },
 						].map((link) => (
 							<Nav.Link
 								key={link.id}
@@ -58,9 +56,7 @@ export const NavBar = () => {
 								{link.label}
 							</Nav.Link>
 						))}
-						<Button variant="light" size="sm" className="ms-lg-3" href="/#contact" onClick={(e: MouseEvent<HTMLButtonElement>) => { e.preventDefault(); navigate('/#contact') }}>
-							Let&apos;s talk
-						</Button>
+						{/* Contact button removed per request */}
 					</Nav>
 				</Navbar.Collapse>
 			</Container>
