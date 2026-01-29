@@ -10,8 +10,8 @@ import { navigate } from './utils/navigate'
 
 const focusAreas = [
 	{
-		title: 'Automation with Excel & Python',
-		copy: 'I study workflows thoroughly and optimize them with the available tools.',
+		title: 'Automation',
+		copy: 'I like to improve workflows and automate repetitive tasks to save time and energy.',
 		href: '/focus/automation-with-empathy',
 	},
 	{
@@ -241,7 +241,6 @@ function App() {
 							<Col lg={8}>
 								<p className="eyebrow">Projects</p>
 								<h2>Things I&apos;ve built so far</h2>
-								<p>These aren&apos;t products—they&apos;re learning moments that shaped my approach.</p>
 							</Col>
 						</Row>
 						<Row className="justify-content-center">
