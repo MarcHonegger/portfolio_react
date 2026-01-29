@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import App from './App.tsx'
 
 // Pages (explicit .tsx extensions to satisfy TS resolution)
@@ -24,6 +24,17 @@ import BrewingIdeas from './pages/focus/brewing-ideas.tsx'
 const Router: React.FC = () => {
     const [path, setPath] = useState(window.location.pathname)
 
+    const scrollTop = () => {
+        const root = document.scrollingElement || document.documentElement
+        const html = document.documentElement
+        const previousBehavior = html.style.scrollBehavior
+        html.style.scrollBehavior = 'auto'
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+        root.scrollTop = 0
+        document.body.scrollTop = 0
+        html.style.scrollBehavior = previousBehavior
+    }
+
     useEffect(() => {
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual'
@@ -36,21 +47,51 @@ const Router: React.FC = () => {
         return () => window.removeEventListener('popstate', onPop)
     }, [])
 
-    useEffect(() => {
-        if (!window.location.hash) {
-            const scrollTop = () => {
-                window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
-                document.documentElement.scrollTop = 0
-                document.body.scrollTop = 0
-            }
+    useLayoutEffect(() => {
+        const isHome = path === '/' || path === '/index.html'
+        if (!isHome) {
             scrollTop()
-            const raf = requestAnimationFrame(scrollTop)
-            const t = window.setTimeout(scrollTop, 50)
-            return () => {
-                cancelAnimationFrame(raf)
-                clearTimeout(t)
-            }
+            const t = window.setTimeout(scrollTop, 0)
+            return () => clearTimeout(t)
         }
+    }, [path])
+
+    useEffect(() => {
+        const isHome = path === '/' || path === '/index.html'
+        const shouldRestore = sessionStorage.getItem('restoreHomeScroll') === '1'
+        const saved = sessionStorage.getItem('homeScrollY')
+        const returnHome = sessionStorage.getItem('returnHome') === '1'
+        const explicitHashNav = sessionStorage.getItem('explicitHashNav') === '1'
+
+        if (isHome) {
+            if (!window.location.hash) {
+                if (shouldRestore && returnHome && saved && !explicitHashNav) {
+                    const scrollToSaved = () => {
+                        const y = Number(saved)
+                        const root = document.scrollingElement || document.documentElement
+                        window.scrollTo({ top: y, left: 0, behavior: 'auto' })
+                        root.scrollTop = y
+                        document.body.scrollTop = y
+                    }
+                    scrollToSaved()
+                    const raf = requestAnimationFrame(scrollToSaved)
+                    const t = window.setTimeout(scrollToSaved, 80)
+                    sessionStorage.removeItem('restoreHomeScroll')
+                    sessionStorage.removeItem('returnHome')
+                    sessionStorage.removeItem('explicitHashNav')
+                    return () => {
+                        cancelAnimationFrame(raf)
+                        clearTimeout(t)
+                    }
+                }
+                sessionStorage.removeItem('returnHome')
+                sessionStorage.removeItem('explicitHashNav')
+            }
+            return
+        }
+
+        sessionStorage.removeItem('returnHome')
+        sessionStorage.removeItem('explicitHashNav')
     }, [path])
 
     // Simple route matching

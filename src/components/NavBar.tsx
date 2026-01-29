@@ -32,14 +32,21 @@ export const NavBar = () => {
 	return (
 		<Navbar expand="lg" className={`nav-elevated ${scrolled ? 'scrolled' : ''}`} fixed="top">
 			<Container>
-				<Navbar.Brand href="#home" onClick={() => onUpdateActiveLink('home')}>
+				<Navbar.Brand
+					href="#home"
+					onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+						e.preventDefault()
+						onUpdateActiveLink('home')
+						navigate('/#home')
+					}}
+				>
 					<img src="/assets/profile.jpeg" alt="Marc profile" className="logo" />
 				</Navbar.Brand>
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="ms-auto align-items-lg-center">
 						{[
-							{ id: 'home', label: 'Home', path: '/' },
+							{ id: 'home', label: 'Home', path: '/#home' },
 							{ id: 'personal', label: 'Personal', path: '/#skills' },
 							{ id: 'projects', label: 'Projects', path: '/#projects' },
 						].map((link) => (

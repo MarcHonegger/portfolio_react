@@ -11,7 +11,7 @@ import { navigate } from './utils/navigate'
 const focusAreas = [
 	{
 		title: 'Automation with Excel & Python',
-		copy: 'I study real banking workflows and optimize them with the available tools.',
+		copy: 'I study workflows thoroughly and optimize them with the available tools.',
 		href: '/focus/automation-with-empathy',
 	},
 	{
@@ -25,8 +25,8 @@ const focusAreas = [
 		href: '/focus/mentorship-responsibility',
 	},
 	{
-		title: 'Coffee and tea',
-		copy: 'I love trying out new tastes and improving my espresso shots every day.',
+		title: 'Japan & Korea',
+		copy: 'I love these countries and their cultures, and I want to explore them in my life.',
 		href: '/focus/brewing-ideas',
 	},
 ]
@@ -63,6 +63,8 @@ for (let i = 0; i < workPieces.length; i += 3) {
 	projectSlides.push(workPieces.slice(i, i + 3))
 }
 
+const projectSlidesMobile = workPieces
+
 const personalGrowth = [
 	{ title: 'Movement', copy: 'Strength training, running, and walks to reset my focus.', href: '/personal/sport' },
 	{ title: 'Journaling', copy: 'Morning preparation and evening reflections to capture gratitude and maximum growth.', href: '/personal/journaling' },
@@ -87,8 +89,7 @@ function App() {
 					<Container>
 						<Row className="align-items-center g-5">
 							<Col lg={7}>
-								<p className="eyebrow">Business Informatics · University of Zurich</p>
-								<h1>Marc Honegger</h1>
+								<h1 className="hero-name">Marc Honegger</h1>
 								<p className="lead">
 									Business Informatics student exploring automation, finance, and longevity.
 								</p>
@@ -138,11 +139,11 @@ function App() {
 									<br />
 									I believe every role matters — from the barista behind the counter to the engineer building skyscrapers.
 									<br />
-
-                                    <br />
-                                    "Look out for people and people will look out for you." - Sam Walton
-                                    <br />
 								</p>
+								<blockquote className="intro-quote">
+									“Look out for people and people will look out for you.”
+									<span className="intro-quote-source">— Sam Walton</span>
+								</blockquote>
 							</Col>
 						</Row>
 					</Container>
@@ -184,8 +185,7 @@ function App() {
 							<Col lg={8}>
 								<p className="eyebrow">Personal growth</p>
 								<h2>Habits keeping me grounded</h2>
-								<p>Sport, journaling, reading, and coffee rituals that fuel how I show up.</p>
-							</Col>
+                            </Col>
 						</Row>
 						<Row className="g-4">
 							{personalGrowth.map((item) => {
@@ -216,7 +216,6 @@ function App() {
 							<Col lg={8}>
 								<p className="eyebrow">Languages</p>
 								<h2>How I communicate</h2>
-								<p>Guided by principles inspired by Dale Carnegie.</p>
 							</Col>
 						</Row>
 						<Row className="justify-content-center">
@@ -247,14 +246,45 @@ function App() {
 						</Row>
 						<Row className="justify-content-center">
 							<Col lg={10}>
-								<Carousel className="projects-carousel" interval={5000} pause="hover" indicators>
-									{projectSlides.map((slide, slideIndex) => (
-										<Carousel.Item key={`slide-${slideIndex}`}>
-											<Row className="g-4">
-												{slide.map((piece) => {
-													const slug = piece.title.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-')
-													return (
-														<Col md={4} key={piece.title}>
+								{/* Desktop/tablet: 3 projects per slide */}
+								<div className="d-none d-md-block">
+									<Carousel className="projects-carousel" interval={5000} pause="hover" indicators>
+										{projectSlides.map((slide, slideIndex) => (
+											<Carousel.Item key={`slide-${slideIndex}`}>
+												<Row className="g-4">
+													{slide.map((piece) => {
+														const slug = piece.title.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-')
+														return (
+															<Col md={4} key={piece.title}>
+																<Card
+																	id={slug}
+																	className="glass-card personal-card project-card h-100"
+																	role="button"
+																	onClick={() => navigate('/projects/' + slug)}
+																>
+																	<Card.Body>
+																		<Card.Title>{piece.title}</Card.Title>
+																		<Card.Text>{piece.copy}</Card.Text>
+																	</Card.Body>
+																</Card>
+															</Col>
+														)
+													})}
+												</Row>
+											</Carousel.Item>
+										))}
+									</Carousel>
+								</div>
+
+								{/* Mobile: 1 project per slide */}
+								<div className="d-block d-md-none">
+									<Carousel className="projects-carousel" interval={5000} pause="hover" indicators>
+										{projectSlidesMobile.map((piece) => {
+											const slug = piece.title.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-')
+											return (
+												<Carousel.Item key={`mobile-${piece.title}`}>
+													<Row className="g-4">
+														<Col xs={12}>
 															<Card
 																id={slug}
 																className="glass-card personal-card project-card h-100"
@@ -267,16 +297,16 @@ function App() {
 																</Card.Body>
 															</Card>
 														</Col>
-													)
-												})}
-											</Row>
-										</Carousel.Item>
-									))}
-								</Carousel>
-							</Col>
-						</Row>
-					</Container>
-				</section>
+													</Row>
+												</Carousel.Item>
+											)
+										})}
+									</Carousel>
+								</div>
+ 							</Col>
+ 						</Row>
+ 					</Container>
+ 				</section>
 			</main>
 			<footer className="footer-note">
 				<Container className="text-center">

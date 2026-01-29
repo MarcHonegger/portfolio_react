@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import type { MouseEvent } from 'react'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -17,24 +17,63 @@ type Props = {
 }
 
 const ProjectPageLayout: React.FC<Props> = ({ title, summary, backTo, children, image }) => {
-	useEffect(() => {
+	const pathRef = useRef<HTMLDivElement | null>(null)
+	const scrollTop = () => {
+		const root = document.scrollingElement || document.documentElement
+		const html = document.documentElement
+		const previousBehavior = html.style.scrollBehavior
+		html.style.scrollBehavior = 'auto'
+		window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+		root.scrollTop = 0
+		document.body.scrollTop = 0
+		html.style.scrollBehavior = previousBehavior
+	}
+
+	useLayoutEffect(() => {
 		// Ensure we land at top on project detail pages, even after layout/paint.
-		const scrollTop = () => {
-			window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
-			document.documentElement.scrollTop = 0
-			document.body.scrollTop = 0
-		}
 		scrollTop()
 		const raf = requestAnimationFrame(scrollTop)
-		const t = window.setTimeout(scrollTop, 50)
+		const t = window.setTimeout(scrollTop, 80)
 		return () => {
 			cancelAnimationFrame(raf)
 			clearTimeout(t)
 		}
 	}, [])
 
+	useEffect(() => {
+		const onPageShow = () => scrollTop()
+		window.addEventListener('pageshow', onPageShow)
+		return () => window.removeEventListener('pageshow', onPageShow)
+	}, [])
+
+	useEffect(() => {
+		let rafId = 0
+		const updatePath = () => {
+			if (!pathRef.current) return
+			const rect = pathRef.current.getBoundingClientRect()
+			const pageTop = window.scrollY + rect.top
+			const revealStart = pageTop + 120
+			const revealAmount = window.scrollY + window.innerHeight - revealStart
+			const maxVisible = pathRef.current.offsetHeight
+			const visible = Math.max(0, Math.min(maxVisible, revealAmount))
+			pathRef.current.style.setProperty('--path-visible', `${visible}px`)
+		}
+		const onScroll = () => {
+			cancelAnimationFrame(rafId)
+			rafId = requestAnimationFrame(updatePath)
+		}
+		updatePath()
+		window.addEventListener('scroll', onScroll, { passive: true })
+		window.addEventListener('resize', onScroll)
+		return () => {
+			cancelAnimationFrame(rafId)
+			window.removeEventListener('scroll', onScroll)
+			window.removeEventListener('resize', onScroll)
+		}
+	}, [])
+
   return (
-    <main>
+    <main className="detail-page">
       <section className="section detail-hero">
         <Container>
           <Row className="align-items-center">
@@ -50,6 +89,7 @@ const ProjectPageLayout: React.FC<Props> = ({ title, summary, backTo, children, 
                   href={backTo}
                   onClick={(e: MouseEvent<HTMLButtonElement>) => {
                     e.preventDefault()
+                    sessionStorage.setItem('returnHome', '1')
                     const mapToFragment = (path?: string) => {
                       if (!path) return ''
                       const p = path.toLowerCase()
@@ -109,6 +149,18 @@ const ProjectPageLayout: React.FC<Props> = ({ title, summary, backTo, children, 
           </Card>
         </Container>
       </section>
+
+      <div className="scroll-path" ref={pathRef} aria-hidden="true">
+        <svg viewBox="0 0 240 1200" role="presentation">
+          <path
+            d="M120 0 C70 80, 170 160, 120 240 C70 320, 170 400, 120 480 C70 560, 170 640, 120 720 C70 800, 170 880, 120 960 C70 1040, 170 1120, 120 1200"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
     </main>
   )
 }

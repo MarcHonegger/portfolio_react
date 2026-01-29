@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import type { MouseEvent } from 'react'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -17,12 +17,63 @@ type Props = {
 }
 
 const DetailPageLayout: React.FC<Props> = ({ title, subtitle, backTo, children, image }) => {
-	useEffect(() => {
+	const pathRef = useRef<HTMLDivElement | null>(null)
+	const scrollTop = () => {
+		const root = document.scrollingElement || document.documentElement
+		const html = document.documentElement
+		const previousBehavior = html.style.scrollBehavior
+		html.style.scrollBehavior = 'auto'
 		window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+		root.scrollTop = 0
+		document.body.scrollTop = 0
+		html.style.scrollBehavior = previousBehavior
+	}
+
+	useLayoutEffect(() => {
+		// Ensure we land at top on detail pages, even after layout/paint.
+		scrollTop()
+		const raf = requestAnimationFrame(scrollTop)
+		const t = window.setTimeout(scrollTop, 80)
+		return () => {
+			cancelAnimationFrame(raf)
+			clearTimeout(t)
+		}
+	}, [])
+
+	useEffect(() => {
+		const onPageShow = () => scrollTop()
+		window.addEventListener('pageshow', onPageShow)
+		return () => window.removeEventListener('pageshow', onPageShow)
+	}, [])
+
+	useEffect(() => {
+		let rafId = 0
+		const updatePath = () => {
+			if (!pathRef.current) return
+			const rect = pathRef.current.getBoundingClientRect()
+			const pageTop = window.scrollY + rect.top
+			const revealStart = pageTop + 120
+			const revealAmount = window.scrollY + window.innerHeight - revealStart
+			const maxVisible = pathRef.current.offsetHeight
+			const visible = Math.max(0, Math.min(maxVisible, revealAmount))
+			pathRef.current.style.setProperty('--path-visible', `${visible}px`)
+		}
+		const onScroll = () => {
+			cancelAnimationFrame(rafId)
+			rafId = requestAnimationFrame(updatePath)
+		}
+		updatePath()
+		window.addEventListener('scroll', onScroll, { passive: true })
+		window.addEventListener('resize', onScroll)
+		return () => {
+			cancelAnimationFrame(rafId)
+			window.removeEventListener('scroll', onScroll)
+			window.removeEventListener('resize', onScroll)
+		}
 	}, [])
 
   return (
-    <main>
+    <main className="detail-page">
       <section className="section detail-hero">
         <Container>
           <Row className="align-items-center">
@@ -37,6 +88,7 @@ const DetailPageLayout: React.FC<Props> = ({ title, subtitle, backTo, children, 
                   href={backTo}
                   onClick={(e: MouseEvent<HTMLButtonElement>) => {
                     e.preventDefault()
+                    sessionStorage.setItem('returnHome', '1')
                     // Always return to the landing page but preserve the section.
                     // Map known backTo routes to a landing-page fragment id.
                     const mapToFragment = (path?: string) => {
@@ -45,18 +97,12 @@ const DetailPageLayout: React.FC<Props> = ({ title, subtitle, backTo, children, 
                       // explicit fragment
                       const hashIdx = p.indexOf('#')
                       if (hashIdx !== -1) return p.slice(hashIdx + 1)
-                      // focus detail -> last segment
-                      if (p.startsWith('/focus/')) {
-                        const parts = p.split('/').filter(Boolean)
-                        return parts[parts.length - 1]
-                      }
-                      if (p === '/focus') return 'skills'
-                      // personal detail -> use the last path segment if present
-                      if (p.startsWith('/personal/')) {
-                        const parts = p.split('/').filter(Boolean)
-                        return parts[parts.length - 1]
-                      }
-                      if (p === '/personal') return 'personal'
+                      // focus detail -> return home without hash to restore scroll
+                      if (p.startsWith('/focus/')) return ''
+                      if (p === '/focus') return ''
+                      // personal detail -> return home without hash to restore scroll
+                      if (p.startsWith('/personal/')) return ''
+                      if (p === '/personal') return ''
                       // projects detail -> last segment
                       if (p.startsWith('/projects/')) {
                         const parts = p.split('/').filter(Boolean)
@@ -104,6 +150,17 @@ const DetailPageLayout: React.FC<Props> = ({ title, subtitle, backTo, children, 
           </Card>
         </Container>
       </section>
+      <div className="scroll-path" ref={pathRef} aria-hidden="true">
+        <svg viewBox="0 0 240 1200" role="presentation">
+          <path
+            d="M120 0 C70 80, 170 160, 120 240 C70 320, 170 400, 120 480 C70 560, 170 640, 120 720 C70 800, 170 880, 120 960 C70 1040, 170 1120, 120 1200"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
     </main>
   )
 }
