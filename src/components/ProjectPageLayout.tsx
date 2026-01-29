@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react'
+import React, { useEffect, useLayoutEffect } from 'react'
 import type { MouseEvent } from 'react'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -17,7 +17,6 @@ type Props = {
 }
 
 const ProjectPageLayout: React.FC<Props> = ({ title, summary, backTo, children, image }) => {
-	const pathRef = useRef<HTMLDivElement | null>(null)
 	const scrollTop = () => {
 		const root = document.scrollingElement || document.documentElement
 		const html = document.documentElement
@@ -44,32 +43,6 @@ const ProjectPageLayout: React.FC<Props> = ({ title, summary, backTo, children, 
 		const onPageShow = () => scrollTop()
 		window.addEventListener('pageshow', onPageShow)
 		return () => window.removeEventListener('pageshow', onPageShow)
-	}, [])
-
-	useEffect(() => {
-		let rafId = 0
-		const updatePath = () => {
-			if (!pathRef.current) return
-			const rect = pathRef.current.getBoundingClientRect()
-			const pageTop = window.scrollY + rect.top
-			const revealStart = pageTop + 120
-			const revealAmount = window.scrollY + window.innerHeight - revealStart
-			const maxVisible = pathRef.current.offsetHeight
-			const visible = Math.max(0, Math.min(maxVisible, revealAmount))
-			pathRef.current.style.setProperty('--path-visible', `${visible}px`)
-		}
-		const onScroll = () => {
-			cancelAnimationFrame(rafId)
-			rafId = requestAnimationFrame(updatePath)
-		}
-		updatePath()
-		window.addEventListener('scroll', onScroll, { passive: true })
-		window.addEventListener('resize', onScroll)
-		return () => {
-			cancelAnimationFrame(rafId)
-			window.removeEventListener('scroll', onScroll)
-			window.removeEventListener('resize', onScroll)
-		}
 	}, [])
 
   return (
@@ -149,18 +122,6 @@ const ProjectPageLayout: React.FC<Props> = ({ title, summary, backTo, children, 
           </Card>
         </Container>
       </section>
-
-      <div className="scroll-path" ref={pathRef} aria-hidden="true">
-        <svg viewBox="0 0 240 1200" role="presentation">
-          <path
-            d="M120 0 C70 80, 170 160, 120 240 C70 320, 170 400, 120 480 C70 560, 170 640, 120 720 C70 800, 170 880, 120 960 C70 1040, 170 1120, 120 1200"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </svg>
-      </div>
     </main>
   )
 }
